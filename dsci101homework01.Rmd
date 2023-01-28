@@ -1,0 +1,75 @@
+---
+title: "hw1"
+author: "Lily Patamia"
+date: "2023-01-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#link to repository
+#https://github.com/lpatamia1/DataScience101.git
+
+```{r}
+library(tidyverse)
+library(mdsr)
+library(ggplot2)
+```
+
+#2 run the following code
+```{r}
+cubs <- read.csv("https://raw.githubusercontent.com/gjm112/DSCI101/main/data/cubs_all_time.csv")
+```
+
+#2a calculate the total number of games won and lost between 1876 and 2022
+```{r}
+sum(cubs$W)
+sum(cubs$L)
+```
+
+#2b what year did the cubs score the most runs? what year did the cubs score the fewest runs? do you have any thoughts about the year that the cubs scored the fewest runs? the cubs scored the most runs in 1930. they scored the lowest in 2020. i don't know a lot about baseball, so i have no thoughts about this.
+```{r}
+cubs %>% select(Tm,Year,R) %>% arrange(R)
+cubs %>% select(Tm,Year,R) %>% arrange(desc(R))
+```
+
+#2c in how many seasons was the cubs total attendance (i.e. the variable attendance) over 3 million? there were a total of 12 seasons where the cubs total attendance exceeded 3 million.
+```{r}
+cubs %>% select(Tm,Attendance) %>% filter(Attendance>3000000)
+```
+
+#2d in the years between 1982 and 2000 (inclusive), what was the greatest ratio of runs for (R) to runs against (RA) in a single season? the greatest ratio of runs to runs against in a single season is in the year 1984 with a ratio of 1.1580547.
+```{r}
+cubs %>% filter(Year <= 2000, Year >= 1982) %>% mutate(rRatio = R/RA) %>% select(Year, R, RA, rRatio) %>% arrange(desc(rRatio))
+```
+
+#run the following code 
+```{r}
+college <- read.csv("https://raw.githubusercontent.com/gjm112/DSCI101/main/data/top_colleges_2022.csv")
+```
+
+#3a how many colleges in this data set are in illinois? there are a total of 16 colleges in this data set that are in illinois.
+```{r}
+sum(college$state=="IL")
+college %>% filter(state=="IL") %>% select(organizationName, state)
+```
+
+#3b find the undergraduate student population of loyola university chicago. the undergraduate student population of loyola university chicago is 13878.
+```{r}
+college %>% filter(organizationName == "Loyola University Chicago") %>% select(organizationName, undergradPop)
+```
+
+#how many colleges in this data set have a larger undergraduate student population than luc? there are 168 colleges with a larger undergraduate student population than loyola university chicago.
+```{r}
+college %>% select(organizationName,undergradPop) %>% filter(undergradPop > 13878)
+```
+
+#3c find the college that is the furthest north. repeat this for south, east, and west. comment on anything interesting that you find. furthest north: western washington university, furthest south: university of hawaii, manoa, furthest east: tennessee technological university, furthest west: university of hawaii, manoa. it is intersting how uh manoa is both the furthest south and west of all the colleges in the data set. 
+```{r}
+college %>% select(organizationName, latitude) %>% arrange(desc(latitude))
+college %>% select(organizationName, latitude) %>% arrange(latitude)
+college %>% select(organizationName, longitude) %>% arrange(desc(longitude))
+college %>% select(organizationName, longitude) %>% arrange(longitude)
+```
